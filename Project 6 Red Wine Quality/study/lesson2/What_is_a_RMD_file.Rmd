@@ -1,0 +1,27 @@
+Speed and Stopping Distances of Cars
+
+========================================================
+
+This is an R Markdown document or RMD. Markdown is a simple formatting syntax for authoring web pages (click the **Help** toolbar button for more details on using R Markdown).
+```{r}
+?cars
+str(cars)
+```
+
+
+```{r}
+setwd("C:/Users/Eng.Mido93/Desktop/Data analyst/Project 6/study/")
+
+pf <- read.csv('lesson3/pseudo_facebook.tsv', sep='\t')
+names(pf)
+
+install.packages('ggplot2')
+library(ggplot2)
+qplot(x = dob_day, data= pf)
+```
+
+
+
+
+
+When you click the **Knit HTML** button a web page will be generated that includes both content as well as the output of any embedded R code chunks within the document.

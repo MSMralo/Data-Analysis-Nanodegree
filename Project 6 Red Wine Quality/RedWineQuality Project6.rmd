@@ -1,0 +1,453 @@
+---
+title: "Analysis of Red Wine Quality "
+author: "Mohamed Alsayed"
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+output: 
+  pdf_document: default
+  html_document:
+    # theme of html document
+    # theme of code highlight                                 
+    # table of contents
+    theme       : cosmo            # "default", "cerulean", "journal",
+                                    # "flatly", "readable", "spacelab",
+                                    # "united", "cosmo", "lumen", "paper", 
+                                    # "sandstone", "simplex", "yeti"
+    highlight   : tango          # "default", "tango", "pygments",
+                                    # "kate",  "monochrome", "espresso",
+                                    # "zenburn", "haddock", "textmate"
+    toc         : true              # get table of content
+    toc_depth   : 3
+    toc_float   : true
+    code_folding: hide
+    number_sections: yes
+    fig_caption: yes
+    df_print    : paged
+---
+
+______________
+
+```{r echo=FALSE, message=FALSE, warning=FALSE, message=FALSE, warning=FALSE, packages}
+# Load all of the packages that you end up using in your analysis in this code
+# chunk.
+
+library(ggplot2)
+library(knitr)
+library(dplyr)
+
+# knitr: Suppress code/messages/warnings 
+#        Set default plot options and center them
+knitr::opts_chunk$set(fig.width=9,fig.height=5,fig.path='Figs/',
+                      fig.align='center',tidy=TRUE,
+                      echo=FALSE,warning=FALSE,message=FALSE)
+
+```
+
+```{r echo=FALSE, message=FALSE, warning=FALSE, Load_the_Data}
+# Load the Data
+red_wine <- read.csv('WineQualityReds.csv')
+```
+
+
+ This tidy data set contains 1,599 red wines with 11 variables on the chemical
+properties of the wine. At least 3 wine experts rated the quality of each wine,
+providing a rating between 0 (very bad) and 10 (very excellent).
+
+# Univariate Plots Section
+
+
+```{r echo=FALSE, message=FALSE, warning=FALSE, Univariate_Plots}
+summary(red_wine$quality)
+
+# Histogram - Quality
+ggplot(aes(x=quality), data= red_wine) + 
+  geom_histogram(stat="count") +
+  scale_y_continuous(breaks=seq(0, 700, 100)) +
+  scale_x_continuous(breaks=seq(3, 8, 1))
+```
+
+
+The quality histogram shows that the majority of wine samples are rated 5 or 6 
+while few samples are rated 1 and 8 and no sample rated above 8 nor less than 3.
+
+
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+summary(red_wine$fixed.acidity)
+
+# Histogram - fixed.acidity
+ggplot(aes(x=fixed.acidity), data= red_wine) + 
+  geom_histogram(binwidth = 0.1) +
+  scale_x_continuous(breaks=seq(4, 16, 1))
+
+```
+
+ The fixed acidity histogram show that the majority of wine samples has fixed acidity of apporximately 7 to 8 and the rest ranges between 4.5 to 13 and few of the samples has higher fixed acidity above 13 to 16.
+
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+summary(red_wine$volatile.acidity)
+
+# Histogram - volatile.acidity
+ggplot(aes(x=volatile.acidity), data= red_wine) + 
+  geom_histogram(binwidth = 0.01) +
+  scale_x_continuous(breaks=seq(0.2, 1.6, 0.1))
+```
+
+ The volatile acidity histogram show that the majority of wine samples has volatile acidity of 0.3 to 0.7
+
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+summary(red_wine$citric.acid)
+
+# Histogram - citric.acid
+ggplot(aes(x=citric.acid), data= red_wine) + 
+  geom_histogram(binwidth = 0.01)
+```
+
+The Citric Acid histogram shows that the majority of wine samples ranges
+between 0 and 0.75 and also we can observe high number of these samples has 0
+citric acid as well as 0.5 citric acid.
+
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+summary(red_wine$residual.sugar)
+
+# Histogram - residual.sugar
+ggplot(aes(x=residual.sugar), data= red_wine) + 
+  geom_histogram(binwidth = 0.1) +
+  scale_x_continuous(breaks=seq(1, 16, 1))
+  
+```
+
+
+The Residual Sugar histogram shows that most of wine samples are between 2
+and 3 on residual sugar and some few samples above 4 to 16.
+
+
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+summary(red_wine$chlorides)
+
+# Histogram - chlorides
+ggplot(aes(x=chlorides), data= red_wine) + 
+  geom_histogram(binwidth = 0.01) +
+  scale_x_continuous(breaks=seq(0.0, 0.6, 0.05))
+```
+
+The Chlorides histogram shows that the majority of wine samples are between 
+0.05 to 0.1 on the chlorides scale.
+
+
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+summary(red_wine$free.sulfur.dioxide)
+
+# Histogram - free.sulfur.dioxide
+ggplot(aes(x=free.sulfur.dioxide), data= red_wine) + 
+  geom_histogram(binwidth = 1) +
+  scale_x_continuous(breaks=seq(0, 70, 10))
+```
+
+The Free Sulfur Dioxide histogram shows that the wine samples ranges 
+between 0 to 50 and many samples has 5 value on the free sulfur dioxide scale.
+
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+summary(red_wine$total.sulfur.dioxide)
+
+# Histogram - total.sulfur.dioxide
+ggplot(aes(x=total.sulfur.dioxide), data= red_wine) + 
+  geom_histogram(binwidth = 1) +
+  scale_x_continuous(breaks=seq(0, 300, 20))
+```
+The total Sulfur Dioxide histogram shows that the majority of wine samples ranges 
+between 10 to 120 and there are some outliers above 260 .
+
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+summary(red_wine$density)
+
+# Histogram - density
+ggplot(aes(x=density), data= red_wine) + 
+  geom_histogram(bins=30) +
+  scale_x_continuous(breaks=seq(0.99, 1.10, 0.0010))
+```
+
+The density histogram shows a nearly normal distrbuted data with a peak of 0.997 and
+range between 0.990 to 1.004
+
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+summary(red_wine$pH)
+
+# Histogram - pH
+ggplot(aes(x=pH), data= red_wine) + 
+  geom_histogram(binwidth = 0.01) +
+  scale_x_continuous(breaks=seq(2, 4, 0.1))
+```
+
+The Ph histogram shows that most wine sample has ph value that ranges 
+between 3 to 3.7 and some of the outlier samples are above 4.
+
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+summary(red_wine$sulphates)
+
+# Histogram - sulphates
+ggplot(aes(x=sulphates), data= red_wine) + 
+  geom_histogram(stat="count")
+```
+
+ The sulphates histogram shows that most of wine samples are ranging between 
+0.5 to 1.
+
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+summary(red_wine$alcohol)
+
+# Histogram - alcohol
+ggplot(aes(x=alcohol), data= red_wine) + 
+  geom_histogram(binwidth = 0.1) +
+  scale_x_continuous(breaks=seq(9, 14, 1))
+```
+
+
+The Alcohol histogram shows that the wine samples has alcohol ranges between
+9 to 14 with a high number of samples contains 9.5 of alcohol.
+
+
+
+# Univariate Analysis
+
+
+### What is the structure of your dataset?
+The dataset consist of 11 variables that contribute in the red wine quality like
+alcohol, ph and density.
+
+### What is/are the main feature(s) of interest in your dataset?
+The most interesting variable is alcohol since its the main factor 
+contributing directly to the quality of the red wine.
+
+
+### What other features in the dataset do you think will help support your \
+investigation into your feature(s) of interest?
+The ph value as well as the density of the wine will both be good factors to 
+detrmine the wine quality.
+
+
+### Did you create any new variables from existing variables in the dataset?
+I measured every variable independently to be able to see its effect on the 
+quality and no new variables has been added.
+
+
+### Of the features you investigated, were there any unusual distributions? \
+Did you perform any operations on the data to tidy, adjust, or change the form \
+of the data? If so, why did you do this?
+The data is pretty tidy and has no errors nor nulls but distributions just
+needed some adjustment for readability so I changed the bin width for most of
+histograms and adjusted their axis for better observations. 
+
+
+# Bivariate Plots Section
+
+
+
+```{r echo=FALSE, message=FALSE, warning=FALSE, Bivariate_Plots}
+
+# jitter and boxplot showing relation between quality and alcohol 
+ggplot(aes(x=as.factor(quality), y=alcohol), data= red_wine) + 
+  geom_jitter(alpha= 0.5 , width = 0.35, height = 0) +
+  geom_boxplot(color ='blue', alpha=0.3)
+```
+
+ The plot above shows the relation between alcohol and the quality of red
+wine, and we can observe that the quality increases when alcohol increases.
+
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+
+# jitter and boxplot showing relation between quality and pH 
+ggplot(aes(x=as.factor(quality), y=pH), data= red_wine) + 
+  geom_jitter(alpha= 0.5 , width = 0.35, height = 0) +
+  geom_boxplot(color ='blue', alpha=0.3)
+```
+
+The relation between pH and the quality are week and the plot shows
+that high pH can get nearly same result as lower pH in quality.
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+
+# jitter and boxplot showing relation between quality and density 
+ggplot(aes(x=as.factor(quality), y=density), data= red_wine) + 
+  geom_jitter(alpha= 0.5 , width = 0.35, height = 0) +
+  geom_boxplot(color ='blue', alpha=0.3)
+
+```
+
+The plot above showing the relation between quality and density, we can observe
+that there is an inverse relation when density increases the quality decreases
+and vice versa.
+
+
+
+# Bivariate Analysis
+
+### Talk about some of the relationships you observed in this part of the \
+investigation. How did the feature(s) of interest vary with other features in \
+the dataset?
+
+-Alcholol has big impact on the quality level of the red wine, we can see from 
+the plotted data that the increase of alchohol increases the chance of high
+quality rates.
+-Density has inverse relation with the quality when the density increases 
+the quality decreases
+-The pH value of the red wine did not show much relation and effect on the 
+quality rate of the red wine.
+
+### Did you observe any interesting relationships between the other features \
+(not the main feature(s) of interest)?
+
+Yes, both density and pH values and how both impacted the change in quality
+rates across all red wine samples.
+
+
+### What was the strongest relationship you found?
+-Alcohol has strongest relationship to the quality rate of the red wine.
+
+
+# Multivariate Plots Section
+
+
+```{r echo=FALSE, message=FALSE, warning=FALSE, Multivariate_Plots}
+
+# colored point plot showing relation between quality, alcohol and density
+ggplot(aes(x=alcohol, y=density, color= as.factor(quality)), data= red_wine) + 
+  geom_point(alpha= 0.5 , width = 0.7, height= 0)  +
+  scale_color_brewer(palette = "RdYlBu", name="Quality",
+                     direction=-1)
+
+```
+
+From the scatterplot above we can observe the inverse relation between density
+and alcohol, when density increases the alcohol decreases. we can also see that
+the quality of red wine is assosicated with high level of alcohol and lower 
+density values which proves previous investigation.
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+
+
+# colored point plot showing relation between quality, alcohol and pH
+ggplot(aes(x=alcohol, y=pH, color= as.factor(quality)), data= red_wine) + 
+  geom_point(alpha= 0.5 , width = 0.7, height= 0)  +
+  scale_color_brewer(palette = "RdYlBu", name="Quality",
+                     direction=-1)
+
+```
+
+
+The above scatterplot shows a weak relationship between pH value and alcohol
+most samples scores between 3 to 3.5 pH and associated with 10 alcohol value
+and the increase in alcohol associated with more quality rates.
+
+
+
+# Multivariate Analysis
+
+### Talk about some of the relationships you observed in this part of the \
+investigation. Were there features that strengthened each other in terms of \
+looking at your feature(s) of interest?
+
+The Density, alcohol and quality scatterplot strenghtened the previous observed
+data from the bivariate section and showed how both of those two factors
+contributed in the red wine quality rating.
+
+### Were there any interesting or surprising interactions between features?
+The pH value of the red wine has no effect on the quality results nor even
+has a clear relationship with alcohol which is surprising.
+
+
+
+------
+
+# Final Plots and Summary
+
+
+### Plot One
+```{r echo=FALSE, message=FALSE, warning=FALSE, Plot_One}
+
+# Histogram - quality
+ggplot(aes(x=as.factor(quality)), data= red_wine) + 
+  geom_histogram(stat="count", fill= 'blue') +
+  scale_y_continuous(breaks=seq(0, 700, 100)) +
+  scale_x_discrete(breaks=seq(3, 8, 1)) +
+  labs(x='Quality (score between 0 and 10)', y='Counts' , title='Quality of red wine Samples')
+
+```
+
+### Description One
+The quality histogram shows that the majority of wine samples are rated 5 or 6 
+while few samples are rated 1 and 8 and no sample rated above 8 nor less than 3.
+
+
+
+### Plot Two
+```{r echo=FALSE, message=FALSE, warning=FALSE, Plot_Two}
+
+# jitter and boxplot showing the relation between quality and alcohol
+ggplot(aes(x=as.factor(quality), y=alcohol), data= red_wine) + 
+  geom_jitter(alpha= 0.5 , width = 0.3 , height= 0) + geom_boxplot(color='blue',alpha=0.3) +
+  labs(x='Quality (score between 0 and 10)', y='Alcohol (% by volume)', 
+       title='relation between Alcohol and Quality of Red wine') +
+  scale_y_continuous(breaks=seq(8, 16, 1)) +
+  scale_x_discrete(breaks=seq(2, 9, 0.5)) 
+```
+
+### Description Two
+ The plot above shows the relation between alcohol and the quality of red
+wine, and we can observe that the quality increases when alcohol increases.
+
+### Plot Three
+```{r echo=FALSE, message=FALSE, warning=FALSE, Plot_Three}
+
+# colored point plot showing relation between quality, alcohol and density
+ggplot(aes(x=alcohol, y=density, color= as.factor(quality)), data= red_wine) + 
+  geom_point(alpha= 0.5 , width = 1.5) +
+  labs(x='Alcohol (% by volume)', y='expression(Density~(g/cm^{3}))', 
+       title= 'Relation between Density, Alcohol and Quality of Red wine' ) +
+  scale_y_continuous(breaks=seq(0.990, 1.1, 0.005)) +
+  scale_x_continuous(breaks=seq(8, 16, 1)) +
+  scale_color_brewer(palette = "RdYlBu", name="Quality", direction=-1)
+```
+
+### Description Three
+
+The above scatterplot shows a weak relationship between pH value and alcohol
+most samples scores between 3 to 3.5 pH and associated with 10 alcohol value
+and the increase in alcohol associated with more quality rates.
+
+------
+
+# Reflection
+
+ The Red wine database contains around 1600 sample of red wine data and all of
+their chemical combinations, with these data we performed a high level data 
+analysis to understand how much every variable of these chemicals contribute
+the most in each sample quality.
+
+Our observation from these data that some variables has big impact on the
+quality rating and some other not for instance, alcohol showed a propotional
+relationship toward the quality whenever the alcohol increases the quality 
+increases. Another factor which has big impact on quality is the density of
+the red wine sample it has inverse relationship with the quality, when the 
+density increases the quality decreases and the alcohol value as well.
+
+For the pH value is surprising since it does not have any impact on the quality
+our plots shows no matter high or less the pH value the quality remain the
+same.
+
+Our analysis is limited to the small data set we observed our data from as
+well as the information we have for each sample as well as using lineear
+regression model only.
+
+Furthermore, for future analysis we might use logestic regression analysis
+for better analysing the red wine quality.
